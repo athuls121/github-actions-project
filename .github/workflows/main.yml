@@ -23,7 +23,8 @@ jobs:
 
       - name: Run unit tests and generate text report
         run: |
-          python -m unittest discover -s ./ -p 'test_app.py' 2>&1 | tee test-report.txt
+          python testfile.py 2>&1 | tee test-report.txt
+
 
       - name: Archive test report
         uses: actions/upload-artifact@v2
