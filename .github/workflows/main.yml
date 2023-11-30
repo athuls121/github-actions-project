@@ -1,0 +1,33 @@
+name: CI/CD
+
+on: [push, pull_request]
+
+jobs:
+  python_unit_tests:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+
+        # #Using CUSTOM ACTIONS to install the requirements namely Python modules
+      - name: Install dependencies
+        uses: ./  
+        with:
+          requirements-file: 'requirements.txt'  
+
+      - name: Run unit tests and generate text report
+        run: |
+          python -m unittest discover -s ./ -p 'test_app.py' 2>&1 | tee test-report.txt
+
+      - name: Archive test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: test-report.txt  # Store the text report as an artifact
+
