@@ -1,5 +1,4 @@
-Flask
-Flask==2.0.3
+flask
 matplotlib
 numpy
 redis
