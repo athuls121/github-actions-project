@@ -14,11 +14,11 @@ jobs:
   code_testing:
       runs-on: ubuntu-latest
     
-      services:
-        redis:
-          image: redis:latest
-          ports:
-            - 6379:6379
+#      services:
+#        redis:
+#          image: redis:latest
+#          ports:
+#            - 6379:6379
 
       steps:
         - name: Checkout code
@@ -27,12 +27,18 @@ jobs:
         - name: Install dependencies
           run: pip install -r requirements.txt
 
-        - name: Run the web_app
+        - name: Run the redis - BackEnd
+          run: |
+              docker image pull redis:latest
+              docker image -t redis:latest docker.pkg.github.com/athuls121/github-actions-project/my_redis
+              docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_BE
+              docker ps
+
+        - name: Run the web_app - FrontEnd
           run: |
               ls -a
-              #python app.py &
               docker build -t docker.pkg.github.com/athuls121/github-actions-project/my_redis .  
-              docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/my_redis
+              docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_FE
               docker ps
 
 
