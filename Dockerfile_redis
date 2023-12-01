@@ -1,0 +1,11 @@
+FROM ubuntu:latest
+
+# Update and install necessary packages
+RUN apt-get update && \
+    apt-get install -y redis-server
+
+# Expose Redis port
+EXPOSE 6379
+
+# Start Redis server when the container starts
+CMD ["redis-server"]

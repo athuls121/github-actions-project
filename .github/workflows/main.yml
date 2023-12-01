@@ -39,35 +39,44 @@ jobs:
 
 
       # Publish Docker image to GitHub Packages
-      - name: Publish Docker image
+      - name: Publish Docker image - Front_End - Application
         run: |
           # Build the Docker image
           docker build -t docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1 .
           # Authenticate to GitHub Packages using secret
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u insightiq --password-stdin
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
           # Push the Docker image to GitHub Packages
           docker push docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
 
 
+      - name: Publish Docker image - Back_End - Redis
+        run:  |
+          docker build -t my-redis-image -f Dockerfile_redis .
 
-      # Use Docker image in service container and run integration tests
-      - name: Run integration tests using Docker image
+          # Authenticate to GitHub Packages using secret
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
+          # Push the Docker image to GitHub Packages
+          docker push my-redis-image
+
+
+      - name: Run Docker Front End
         run: |
           # Start the container
-          echo 1
           docker run --rm -d --name ica2_container -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
-          sleep 10  # Give some time for the container to start (adjust this time if needed)
-          docker ps -a
+          docker ps
 
-          echo 2
+
+      - name: Run Docker Back End
+        run: |
+          # Start the container
+          docker run -d --name my-redis-container -p 6379:6379 my-redis-image
+          docker ps
+
+
+      - name: Run the unit test for the Application
+        run: |
+          sleep 10  # Give some time for the container to start 
           docker exec ica2_container ls
-          echo 3
           docker exec ica2_container python test_app.py
-          echo 3
-          docker exec ica2_container app.log
 
-          echo 4
-          # Stop and remove the container
-          docker stop ica2_container
-
-
+#          docker stop ica2_container
