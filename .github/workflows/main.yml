@@ -61,9 +61,11 @@ jobs:
       - name: Run integration tests using Docker image
         run: |
           # Start the container
-          docker run --rm -d --name ica2_container -p 5000:5000 docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
+          echo 1
+          docker run --rm -d --name ica2_container -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
           sleep 10  # Give some time for the container to start (adjust this time if needed)
 
+          echo 2
           docker exec ica2_container ls
           docker exec ica2_container python test_app.py
           docker exec ica2_container app.log
