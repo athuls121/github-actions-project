@@ -47,13 +47,6 @@ jobs:
           echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u insightiq --password-stdin
           # Push the Docker image to GitHub Packages
           docker push docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
-        env:
-          USERNAME: ${{ github.repository_owner }}
-          REPOSITORY: ${{ github.event.repository.name }}
-          IMAGE_NAME: ica2_image
-          TAG: v1
-
-
 
 
 
@@ -67,14 +60,12 @@ jobs:
 
           echo 2
           docker exec ica2_container ls
+          echo 3
           docker exec ica2_container python test_app.py
+          echo 3
           docker exec ica2_container app.log
 
+          echo 4
           # Stop and remove the container
           docker stop ica2_container
-        env:
-          USERNAME: ${{ github.repository_owner }}
-          REPOSITORY: ${{ github.event.repository.name }}
-          IMAGE_NAME: ica2_image
-          TAG: v1
 
