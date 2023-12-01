@@ -27,26 +27,28 @@ jobs:
         - name: Install dependencies
           run: pip install -r requirements.txt
 
-        - name: Run the web app
+        - name: Run the web_app
           run: |
               ls
               #python app.py &
-               
+              docker build -t docker.pkg.github.com/athuls121/github-actions-project/my_redis .  
+              docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/my_redis
+              docker ps
 
 
+        - name: Wait for app to start
+          run: sleep 10
 
-#        - name: Wait for app to start
-#          run: sleep 10
-#
-#        - name: Run Tests
-#          run: python test_app.py 2>&1 | tee test-report.txt
-#
-#        - name: Verify running container
-#          run: |
-#              docker ps
-#
-#        - name: Archive test report
-#          uses: actions/upload-artifact@v2
-#          with:
-#            name: test-report
-#            path: test-report.txt
+        - name: Run Tests
+          run: python test_app.py 2>&1 | tee test-report.txt
+
+
+        - name: Archive test report
+          uses: actions/upload-artifact@v2
+          with:
+            name: test-report
+            path: test-report.txt
+
+        - name: web_app Image Push
+          run: |
+            docker push docker.pkg.github.com/athuls121/github-actions-project/my_redis
