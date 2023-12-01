@@ -2,6 +2,14 @@ name: Code Testing
 
 on: [push, pull_request]
 
+# declaring global env variables
+env:
+  USERNAME: ${{ github.repository_owner }}
+  REPOSITORY: ${{ github.event.repository.name }}
+  IMAGE_NAME: ica2_image
+  TAG: v1
+
+
 jobs:
   code_testing:
       runs-on: ubuntu-latest
@@ -17,10 +25,6 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v2
 
-        - name: Verify running container
-          run: |
-              docker ps
-
         - name: Install dependencies
           run: pip install -r requirements.txt
 
@@ -32,6 +36,10 @@ jobs:
 
         - name: Run Tests
           run: python test_app.py 2>&1 | tee test-report.txt
+
+        - name: Verify running container
+          run: |
+              docker ps
 
         - name: Archive test report
           uses: actions/upload-artifact@v2
