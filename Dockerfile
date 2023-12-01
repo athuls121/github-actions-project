@@ -1,5 +1,5 @@
 # Use a base image (example: Python)
-FROM python:3.12
+FROM python:3.9
 # Set working directory
 WORKDIR /app
 # Copy application files to the container
