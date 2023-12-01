@@ -1,8 +1,7 @@
 # tests/test_app.py
 
 import unittest
-#import flask
-from flask import Flask, render_template, request, jsonify
+#from flask import Flask, render_template, request, jsonify
 from app import app
 
 class TestApp(unittest.TestCase):
@@ -27,7 +26,6 @@ class TestApp(unittest.TestCase):
         self.assertIn(b'test_value', response.data)
 
     def tearDown(self):
-        # Add any cleanup code here if needed
         pass
 
 if __name__ == '__main__':
