@@ -1,7 +1,8 @@
 # tests/test_app.py
 
 import unittest
-from flask import Flask, render_template, request, jsonify
+#from flask import Flask, render_template, request, jsonify
+import flask
 #from app import app
 
 class TestApp(unittest.TestCase):
