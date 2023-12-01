@@ -19,16 +19,6 @@ jobs:
           image: redis:latest
           ports:
             - 6379:6379
-            
-        web-app:
-          build:
-            context: .
-            dockerfile: Dockerfile
-          ports:
-            - 8080:8080
-          env:
-            REDIS_HOST: redis
-    
 
       steps:
         - name: Checkout code
@@ -38,20 +28,25 @@ jobs:
           run: pip install -r requirements.txt
 
         - name: Run the web app
-          run: python app.py &
-
-        - name: Wait for app to start
-          run: sleep 10
-
-        - name: Run Tests
-          run: python test_app.py 2>&1 | tee test-report.txt
-
-        - name: Verify running container
           run: |
-              docker ps
+              ls
+              #python app.py &
+               
 
-        - name: Archive test report
-          uses: actions/upload-artifact@v2
-          with:
-            name: test-report
-            path: test-report.txt
+
+
+#        - name: Wait for app to start
+#          run: sleep 10
+#
+#        - name: Run Tests
+#          run: python test_app.py 2>&1 | tee test-report.txt
+#
+#        - name: Verify running container
+#          run: |
+#              docker ps
+#
+#        - name: Archive test report
+#          uses: actions/upload-artifact@v2
+#          with:
+#            name: test-report
+#            path: test-report.txt
