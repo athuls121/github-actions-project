@@ -23,6 +23,7 @@ jobs:
 
       - name: Run unit tests and generate text report
         run: |
+          pip install Werkzeug==2.0.3 Flask==2.0.3
           python test_app.py 2>&1 | tee test-report.txt
 
 
