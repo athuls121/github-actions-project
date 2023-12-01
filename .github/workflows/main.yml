@@ -34,7 +34,13 @@ jobs:
         run: |
           pip install -r requirements.txt
           nohup python app.py &
-
+          sleep 10s
 
       - name: Run Tests
-        run: python test_app.py
+        run: python test_app.py 2>&1 | tee test-report.txt
+
+      - name: Archive test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: test-report.txt  # Store the text report as an artifact
