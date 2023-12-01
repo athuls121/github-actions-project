@@ -22,13 +22,17 @@ jobs:
           - 8080:8080
         env:
           REDIS_HOST: redis
-        command: sh -c "pip install -r requirements.txt && python app.py"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Wait for services to start
         run: sleep 10
+
+      - name: Install dependencies and run the application
+        run: |
+          pip install -r requirements.txt
+          python app.py
 
       - name: Run Tests
         run: python test_app.py
