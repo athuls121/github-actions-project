@@ -26,21 +26,21 @@ jobs:
               docker image pull redis:latest
               docker image tag redis:latest docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
               docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
-              docker ps
 
         - name: Run the web_app - FrontEnd
           run: |
               ls -a
               docker build -t docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1 .  
               docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
-              docker ps
 
         - name: Verify web application using CURL
           run: |
               docker exec web_app curl http://localhost:8080
 
         - name: Wait for app to start
-          run: sleep 10
+          run: |
+            sleep 10
+            docker ps
 
         - name: Run Tests
           run: python test_app.py 2>&1 | tee test-report.txt
