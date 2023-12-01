@@ -29,7 +29,7 @@ jobs:
 
         - name: Run the web_app
           run: |
-              ll -a
+              ls -a
               #python app.py &
               docker build -t docker.pkg.github.com/athuls121/github-actions-project/my_redis .  
               docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/my_redis
