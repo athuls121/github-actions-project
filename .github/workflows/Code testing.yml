@@ -1,0 +1,41 @@
+name: Code Testing
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Start Redis service
+        run: docker run -d --name redis-service -p 6379:6379 redis:latest
+
+      - name: Wait for Redis to start
+        run: docker inspect --format "{{json .State.Health.Status }}" redis-service | grep -q '"healthy"' || exit 1
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run the web app
+        run: python app.py &
+
+      - name: Wait for app to start
+        run: sleep 10
+
+      - name: Run Tests
+        run: python test_app.py 2>&1 | tee test-report.txt
+
+      - name: Archive test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report
+          path: test-report.txt

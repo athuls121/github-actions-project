@@ -1,0 +1,10 @@
+name: Deploy Testing
+
+on:
+  workflow_run:
+    workflows: ["Code Testing"]
+    types:
+      - completed
+
+jobs:
+  deploy_testing:
