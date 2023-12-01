@@ -6,5 +6,50 @@ on:
     types:
       - completed
 
+# declaring global env variables
+env:
+  USERNAME: ${{ github.repository_owner }}
+  REPOSITORY: ${{ github.event.repository.name }}
+  IMAGE_NAME_APP: docker.pkg.github.com/athuls121/github-actions-project/redis_be
+  IMAGE_NAME_DB: docker.pkg.github.com/athuls121/github-actions-project/web_app_fe
+  TAG: v1
+
+
 jobs:
   deploy_testing:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run the redis - BackEnd
+        run: |
+            docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            docker ps
+
+      - name: Run the web_app - FrontEnd
+        run: |
+            docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            docker run --rm -d --name web_app -p ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            docker ps
+
+      - name: Verify web application using CURL
+        run: |
+          docker exec web_app curl http://localhost:8080
+
+      - name: Wait for app to start
+        run: sleep 10
+
+      - name: Run Tests
+        run: python test_app.py 2>&1 | tee test-report.txt
+
+
+      - name: Archive test report
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-report-TestEnv
+          path: test-report-TestEnv.txt

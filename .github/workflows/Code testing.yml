@@ -13,12 +13,6 @@ env:
 jobs:
   code_testing:
       runs-on: ubuntu-latest
-    
-#      services:
-#        redis:
-#          image: redis:latest
-#          ports:
-#            - 6379:6379
 
       steps:
         - name: Checkout code
@@ -40,8 +34,10 @@ jobs:
               docker build -t docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1 .  
               docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
               docker ps
-              docker exec web_app curl http://localhost:8080
 
+        - name: Verify web application using CURL
+          run: |
+              docker exec web_app curl http://localhost:8080
 
         - name: Wait for app to start
           run: sleep 10
