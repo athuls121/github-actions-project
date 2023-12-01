@@ -2,6 +2,15 @@ name: CI/CD
 
 on: [push, pull_request]
 
+# declaring global env variables
+env:
+  USERNAME: ${{ github.repository_owner }}
+  REPOSITORY: ${{ github.event.repository.name }}
+  IMAGE_NAME: ica2_image
+  TAG: v1
+
+
+
 jobs:
   python_unit_tests:
     runs-on: ubuntu-latest
@@ -10,18 +19,60 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
+#      - name: Set up Python
+#        uses: actions/setup-python@v2
+#        with:
+#          python-version: '3.x'
 
         # #Using CUSTOM ACTIONS to install the requirements namely Python modules
-      - name: Install dependencies
-        uses: athuls121/github-actions-project@main
-        with:
-          requirements-file: 'requirements.txt' 
+#      - name: Install dependencies
+#        uses: athuls121/github-actions-project@main
+#        with:
+#          requirements-file: 'requirements.txt' 
 
 
-      - name: Run unit tests and generate text report
+#      - name: Run unit tests and generate text report
+#        run: |
+#          python test_app.py 2>&1 | tee test-report.txt
+
+
+
+
+      # Publish Docker image to GitHub Packages
+      - name: Publish Docker image
         run: |
-          python test_app.py 2>&1 | tee test-report.txt
+          # Build the Docker image
+          docker build -t docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1 .
+          # Authenticate to GitHub Packages using secret
+          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u insightiq --password-stdin
+          # Push the Docker image to GitHub Packages
+          docker push docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
+        env:
+          USERNAME: ${{ github.repository_owner }}
+          REPOSITORY: ${{ github.event.repository.name }}
+          IMAGE_NAME: ica2_image
+          TAG: v1
+
+
+
+
+
+      # Use Docker image in service container and run integration tests
+      - name: Run integration tests using Docker image
+        run: |
+          # Start the container
+          docker run --rm -d --name ica2_container -p 5000:5000 docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
+          sleep 10  # Give some time for the container to start (adjust this time if needed)
+
+          docker exec ica2_container ls
+          docker exec ica2_container python test_app.py
+          docker exec ica2_container app.log
+
+          # Stop and remove the container
+          docker stop ica2_container
+        env:
+          USERNAME: ${{ github.repository_owner }}
+          REPOSITORY: ${{ github.event.repository.name }}
+          IMAGE_NAME: ica2_image
+          TAG: v1
+
