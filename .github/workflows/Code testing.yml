@@ -30,7 +30,7 @@ jobs:
         - name: Run the redis - BackEnd
           run: |
               docker image pull redis:latest
-              docker image -t redis:latest docker.pkg.github.com/athuls121/github-actions-project/my_redis
+              docker image tag redis:latest docker.pkg.github.com/athuls121/github-actions-project/my_redis
               docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_BE
               docker ps
 
