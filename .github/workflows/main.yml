@@ -15,17 +15,17 @@ jobs:
         with:
           python-version: '3.x'
 
-#        # #Using CUSTOM ACTIONS to install the requirements namely Python modules
-#      - name: Install dependencies
-#        uses: ./  
-#        with:
-#          requirements-file: 'requirements.txt' 
-
-
+        # #Using CUSTOM ACTIONS to install the requirements namely Python modules
       - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt  # Replace with your requirements file if needed
+        uses: ./.github/actions/install-python-dependencies.yml
+        with:
+          requirements-file: 'requirements.txt' 
+
+
+#      - name: Install dependencies
+#        run: |
+#          python -m pip install --upgrade pip
+#          pip install -r requirements.txt  # Replace with your requirements file if needed
   
 
 
