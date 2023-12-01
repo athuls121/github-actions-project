@@ -29,6 +29,9 @@ jobs:
         run: |
             #docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
             #docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+
+            #Authenticate to GitHub Packages using secret
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
             docker image pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
             docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
 
@@ -36,6 +39,9 @@ jobs:
         run: |
             #docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
             #docker run --rm -d --name web_app -p ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            
+            #Authenticate to GitHub Packages using secret
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
             docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
             docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
 
