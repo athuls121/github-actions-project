@@ -16,11 +16,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Start Redis service
-        run: docker run -d --name redis-service -p 6379:6379 redis:latest
-
-      - name: Wait for Redis to start
-        run: docker inspect --format "{{json .State.Health.Status }}" redis-service | grep -q '"healthy"' || exit 1
+      - name: Verify Redis service
+        run: systemctl status redis
 
       - name: Install dependencies
         run: pip install -r requirements.txt
