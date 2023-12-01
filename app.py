@@ -1,6 +1,5 @@
 # app.py
 
-import flask
 from flask import Flask, render_template, request, jsonify
 import redis
 

@@ -2,7 +2,8 @@
 
 import unittest
 #from flask import Flask, render_template, request, jsonify
-from app import app
+#from app import app
+import app
 
 class TestApp(unittest.TestCase):
     def setUp(self):
