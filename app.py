@@ -1,6 +1,7 @@
 # app.py
 
-from flask import Flask, render_template, request, jsonify
+import flask
+#from flask import Flask, render_template, request, jsonify
 import redis
 
 app = Flask(__name__)
@@ -30,3 +31,4 @@ def retrieve_data(key):
 
 if __name__ == '__main__':
     app.run(debug=True, port=8080)
+
