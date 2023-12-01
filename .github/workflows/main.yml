@@ -57,6 +57,7 @@ jobs:
           echo 1
           docker run --rm -d --name ica2_container -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
           sleep 10  # Give some time for the container to start (adjust this time if needed)
+          docker ps
 
           echo 2
           docker exec ica2_container ls
