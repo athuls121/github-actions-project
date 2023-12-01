@@ -29,7 +29,7 @@ jobs:
 
         - name: Run the web_app
           run: |
-              ls
+              ll -a
               #python app.py &
               docker build -t docker.pkg.github.com/athuls121/github-actions-project/my_redis .  
               docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/my_redis
@@ -51,4 +51,8 @@ jobs:
 
         - name: web_app Image Push
           run: |
-            docker push docker.pkg.github.com/athuls121/github-actions-project/my_redis
+            #Authenticate to GitHub Packages using secret
+              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
+            # Push the Docker image to GitHub Packages
+              docker push docker.pkg.github.com/athuls121/github-actions-project/my_redis
+
