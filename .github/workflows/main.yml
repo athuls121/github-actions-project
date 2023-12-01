@@ -2,81 +2,33 @@ name: CI/CD
 
 on: [push, pull_request]
 
-# declaring global env variables
 env:
   USERNAME: ${{ github.repository_owner }}
   REPOSITORY: ${{ github.event.repository.name }}
   IMAGE_NAME: ica2_image
   TAG: v1
 
-
-
 jobs:
-  python_unit_tests:
+  test:
     runs-on: ubuntu-latest
-    
+    services:
+      redis:
+        image: redis:latest
+        ports:
+          - 6379:6379
+      web-app:
+        image: python:3.9
+        ports:
+          - 8080:8080
+        env:
+          REDIS_HOST: redis
+        command: sh -c "pip install -r requirements.txt && python app.py"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-#      - name: Set up Python
-#        uses: actions/setup-python@v2
-#        with:
-#          python-version: '3.x'
+      - name: Wait for services to start
+        run: sleep 10
 
-        # #Using CUSTOM ACTIONS to install the requirements namely Python modules
-#      - name: Install dependencies
-#        uses: athuls121/github-actions-project@main
-#        with:
-#          requirements-file: 'requirements.txt' 
-
-
-#      - name: Run unit tests and generate text report
-#        run: |
-#          python test_app.py 2>&1 | tee test-report.txt
-
-
-
-
-      # Publish Docker image to GitHub Packages
-      - name: Publish Docker image - Front_End - Application
-        run: |
-          # Build the Docker image
-          docker build -t docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1 .
-          # Authenticate to GitHub Packages using secret
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-          # Push the Docker image to GitHub Packages
-          docker push docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
-
-
-      - name: Publish Docker image - Back_End - Redis
-        run:  |
-          docker build -t docker.pkg.github.com/athuls121/github-actions-project/my-redis-image -f Dockerfile_redis .
-
-          # Authenticate to GitHub Packages using secret
-          echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-          # Push the Docker image to GitHub Packages
-          docker push docker.pkg.github.com/athuls121/github-actions-project/my-redis-image
-
-
-      - name: Run Docker Back End
-        run: |
-          # Start the container
-          docker run -d --name my-redis-container -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/my-redis-image
-          docker ps
-
-      - name: Run Docker Front End
-        run: |
-          # Start the container
-          docker run --rm -d --name ica2_container -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/ica2_image:v1
-          docker ps
-
-      - name: Run the unit test for the Application
-        run: |
-          sleep 10  # Give some time for the container to start 
-          docker exec ica2_container ls
-          curl http://localhost:8080
-          docker exec ica2_container python3 test_app.py
-
-#          docker stop ica2_container
-
+      - name: Run Tests
+        run: python test_app.py
