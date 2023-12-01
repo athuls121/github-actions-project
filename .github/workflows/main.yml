@@ -22,6 +22,7 @@ jobs:
           - 8080:8080
         env:
           REDIS_HOST: redis
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -32,7 +33,8 @@ jobs:
       - name: Install dependencies and run the application
         run: |
           pip install -r requirements.txt
-          python app.py
+          nohup python app.py &
+
 
       - name: Run Tests
         run: python test_app.py
