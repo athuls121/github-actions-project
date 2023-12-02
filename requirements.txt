@@ -3,5 +3,4 @@ matplotlib
 numpy
 redis
 Werkzeug==2.0.3
-requests  
-curl
+requests
