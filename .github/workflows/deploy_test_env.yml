@@ -29,10 +29,10 @@ jobs:
             docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
             docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
 
-            #Authenticate to GitHub Packages using secret
-            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
-            #docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
+#            #Authenticate to GitHub Packages using secret
+#            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
+#            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
+#            #docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
 
       - name: Run the web_app - FrontEnd
         run: |
@@ -41,16 +41,16 @@ jobs:
             docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
             docker run --rm -d --name web_app -p 8080:8080 ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
 
-            #Authenticate to GitHub Packages using secret
-            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
-            #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+#            #Authenticate to GitHub Packages using secret
+#            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
+#            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+#            #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
 
       - name: Verify web application using CURL
         run: |
-          sleep 5s
-          docker ps
-          docker exec web_app curl http://localhost:8080
+            sleep 5s
+            docker ps
+            docker exec web_app curl http://localhost:8080
 
       - name: Wait for unit test to start
         run: sleep 10
