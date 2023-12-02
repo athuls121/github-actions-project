@@ -39,7 +39,7 @@ jobs:
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
             docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
-            docker run --rm -d --name web_app -p ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            docker run --rm -d --name web_app -p 8080:8080 ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
 
             #Authenticate to GitHub Packages using secret
             #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
