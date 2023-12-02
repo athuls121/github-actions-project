@@ -49,8 +49,8 @@ jobs:
       - name: Verify web application using CURL
         run: |
           sleep 5s
-          docker exec web_app curl http://localhost:8080
           docker ps
+          docker exec web_app curl http://localhost:8080
 
       - name: Wait for unit test to start
         run: sleep 10
