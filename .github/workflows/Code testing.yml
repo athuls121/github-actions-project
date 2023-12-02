@@ -6,9 +6,7 @@ on: [push, pull_request]
 env:
   USERNAME: ${{ github.repository_owner }}
   REPOSITORY: ${{ github.event.repository.name }}
-  IMAGE_NAME: ica2_image
-  TAG: v1
-
+  
 
 jobs:
   code_testing:

@@ -10,11 +10,8 @@ on:
 env:
   USERNAME: ${{ github.repository_owner }}
   REPOSITORY: ${{ github.event.repository.name }}
-  IMAGE_NAME_APP: docker.pkg.github.com/athuls121/github-actions-project/redis_be
-  IMAGE_NAME_DB: docker.pkg.github.com/athuls121/github-actions-project/web_app_fe
-  TAG: v1
 
-
+  
 jobs:
   deploy_production:
     runs-on: ubuntu-latest
@@ -29,8 +26,8 @@ jobs:
         run: |
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            #docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
-            #docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
 
             #Authenticate to GitHub Packages using secret
             #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
@@ -39,13 +36,15 @@ jobs:
 
       - name: Run the web_app - FrontEnd
         run: |
-            #docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
-            #docker run --rm -d --name web_app -p ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
-            
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
-            docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+            docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            docker run --rm -d --name web_app -p ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            
+            #Authenticate to GitHub Packages using secret
+            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
+            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+            #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
 
       - name: Verify web application using CURL
         run: |
