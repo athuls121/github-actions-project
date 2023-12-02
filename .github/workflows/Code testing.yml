@@ -64,3 +64,4 @@ jobs:
               echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
             # Push the Docker image to GitHub Packages
               docker push docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+
