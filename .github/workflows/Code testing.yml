@@ -39,7 +39,6 @@ jobs:
               sleep 5s
               docker ps
               curl http://localhost:8080
-              exit
 
         - name: Wait for app to start
           run: |

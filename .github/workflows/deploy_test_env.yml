@@ -26,40 +26,33 @@ jobs:
         run: |
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
-            docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            #docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            #docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
 
-#            #Authenticate to GitHub Packages using secret
-#            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-#            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
-#            #docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
+            docker image pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
+            docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
 
       - name: Run the web_app - FrontEnd
         run: |
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
-            docker run --rm -d --name web_app -p 8080:8080 ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            #docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            #docker run --rm -d --name web_app -p 8080:8080 ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
 
-#            #Authenticate to GitHub Packages using secret
-#            #echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-#            #docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
-#            #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+            docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+            docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
 
       - name: Verify web application using CURL
         run: |
             sleep 5s
             docker ps
             curl http://localhost:8080
-#            #docker exec web_app apt update && apt install curl            
-#            #docker exec web_app curl http://localhost:8080
 
       - name: Wait for unit test to start
         run: sleep 10
 
       - name: Run Tests
         run: python test_app.py 2>&1 | tee test-report.txt
-
 
       - name: Archive test report
         uses: actions/upload-artifact@v2
