@@ -40,7 +40,7 @@ jobs:
               docker ps
               docker exec web_app bash
               sudo su
-              apt update && apt install curl
+              apt install curl
               curl http://localhost:8080
               exit
 
