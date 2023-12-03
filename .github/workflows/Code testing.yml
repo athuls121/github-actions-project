@@ -38,7 +38,7 @@ jobs:
           run: |
               sleep 5s
               docker ps
-              docker exec -it web_app bash
+              docker exec web_app bash
               sudo su
               apt update && apt install curl
               curl http://localhost:8080
