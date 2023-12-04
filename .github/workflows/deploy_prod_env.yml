@@ -1,6 +1,22 @@
-name: CI/CD
+name: Deploy Testing Env
 
-on: [push, pull_request]
+on:
+  workflow_run:
+    workflows: ["Deploy Testing Env"]
+    types:
+      - completed
+
+# declaring global env variables
+env:
+    USERNAME: ${{ github.repository_owner }}
+    REPOSITORY: ${{ github.event.repository.name }}
+  
+    IMAGE_NAME_DB: ${{ secrets.IMAGE_NAME_DB }}
+    IMAGE_NAME_APP: ${{ secrets.IMAGE_NAME_APP }}
+    TAG: ${{ secrets.TAG }}
+  
+    HOST: ${{ secrets.EC2_HOST }}
+    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
 jobs:
   Linux-self-hosted:
