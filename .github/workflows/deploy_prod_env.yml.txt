@@ -1,0 +1,53 @@
+name: Deploy Production Env
+
+on:
+  workflow_run:
+    workflows: ["Deploy Testing Env"]
+    types:
+      - completed
+
+# declaring global env variables
+env:
+  USERNAME: ${{ github.repository_owner }}
+  REPOSITORY: ${{ github.event.repository.name }}
+
+  
+jobs:
+  deploy_production:
+    runs-on: ubuntu-latest
+
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    environment: Production Environment    #creating seperate Production Environment in GitHub
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run the redis - BackEnd
+        run: |
+            #Authenticate to GitHub Packages using secret
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u USERNAME --password-stdin
+            docker image pull "${{ secrets.IMAGE_NAME_DB }}":"${{ secrets.TAG }}"
+            docker run --rm -d --name redis -p 6379:6379 "${{ secrets.IMAGE_NAME_DB }}":"${{ secrets.TAG }}"
+
+            #docker image pull docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/redis_be:v1
+            #docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/redis_be:v1
+
+      - name: Run the web_app - FrontEnd
+        run: |
+            #Authenticate to GitHub Packages using secret
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u USERNAME --password-stdin
+            docker image pull "${{ secrets.IMAGE_NAME_APP }}":"${{ secrets.TAG }}"
+            docker run --rm -d --name web_app -p 8080:8080 "${{ secrets.IMAGE_NAME_APP }}":"${{ secrets.TAG }}"
+            
+            #docker image pull docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/web_app_fe:v1
+            #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/web_app_fe:v1
+
+      - name: Verify web application using CURL
+        run: |
+            sleep 5s
+            docker ps
+            curl http://localhost:8080

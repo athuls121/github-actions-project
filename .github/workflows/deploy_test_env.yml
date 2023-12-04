@@ -16,9 +16,9 @@ jobs:
   deploy_testing:
     runs-on: ubuntu-latest
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}    #creating seperating environment in GitHub
 
-    environment: Testing Environment    #creating seperating environment in GitHub
+    environment: Testing Environment    #creating seperate Test Environment in GitHub
 
     steps:
       - name: Checkout code

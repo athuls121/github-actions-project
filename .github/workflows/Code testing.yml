@@ -34,11 +34,11 @@ jobs:
               docker build -t docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1 .  
               docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1
 
-        - name: Verify web application using CURL
-          run: |
-              sleep 5s
-              docker ps
-              curl http://localhost:8080
+#        - name: Verify web application using CURL
+#          run: |
+#              sleep 5s
+#              docker ps
+#              curl http://localhost:8080
 
         - name: Wait for app to start
           run: |
