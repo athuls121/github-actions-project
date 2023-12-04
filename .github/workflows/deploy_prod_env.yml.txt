@@ -11,43 +11,53 @@ env:
   USERNAME: ${{ github.repository_owner }}
   REPOSITORY: ${{ github.event.repository.name }}
 
-  
+  IMAGE_NAME_DB: ${{ secrets.IMAGE_NAME_DB }}
+  IMAGE_NAME_APP: ${{ secrets.IMAGE_NAME_APP }}
+  TAG: ${{ secrets.TAG }}
+
+  HOST: ${{ secrets.EC2_HOST }}
+  SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+
 jobs:
   deploy_production:
     runs-on: ubuntu-latest
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
-    environment: Production Environment    #creating seperate Production Environment in GitHub
+    environment: Production Environment
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Install dependencies
-        run: pip install -r requirements.txt
-      - name: Run the redis - BackEnd
-        run: |
-            #Authenticate to GitHub Packages using secret
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u USERNAME --password-stdin
-            docker image pull "${{ secrets.IMAGE_NAME_DB }}":"${{ secrets.TAG }}"
-            docker run --rm -d --name redis -p 6379:6379 "${{ secrets.IMAGE_NAME_DB }}":"${{ secrets.TAG }}"
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.12'
 
-            #docker image pull docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/redis_be:v1
-            #docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/redis_be:v1
-
-      - name: Run the web_app - FrontEnd
+      - name: Install Ansible
         run: |
-            #Authenticate to GitHub Packages using secret
-            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u USERNAME --password-stdin
-            docker image pull "${{ secrets.IMAGE_NAME_APP }}":"${{ secrets.TAG }}"
-            docker run --rm -d --name web_app -p 8080:8080 "${{ secrets.IMAGE_NAME_APP }}":"${{ secrets.TAG }}"
-            
-            #docker image pull docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/web_app_fe:v1
-            #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/USERNAME/${{ env.REPOSITORY }}/web_app_fe:v1
+          pip install ansible
 
-      - name: Verify web application using CURL
+      - name: Save SSH private key
         run: |
-            sleep 5s
-            docker ps
-            curl http://localhost:8080
+          mkdir -p ~/.ssh/
+          echo "${{ env.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -H "${{ env.HOST }}" >> ~/.ssh/known_hosts
+          chmod 644 ~/.ssh/known_hosts
+          ls
+
+      - name: Create Ansible inventory
+        run: |
+          echo "[servers]" > inventory.ini
+          echo "${{ env.HOST }} ansible_user=${{ env.USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa" >> inventory.ini
+
+      - name: Show playbook content
+        run: |
+          cat playbook.yml  
+
+      - name: Run Ansible playbook
+        run: |
+            ansible-playbook -i inventory.ini playbook.yml  
+
