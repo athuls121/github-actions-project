@@ -25,14 +25,14 @@ jobs:
         - name: Run the redis - BackEnd
           run: |
               docker image pull redis:latest
-              docker image tag redis:latest docker.pkg.github.com/USERNAME/github-actions-project/redis_be:v1
-              docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/USERNAME/github-actions-project/redis_be:v1
+              docker image tag redis:latest docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/redis_be:v1
+              docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/redis_be:v1
 
         - name: Run the web_app - FrontEnd
           run: |
               ls -a
-              docker build -t docker.pkg.github.com/USERNAME/github-actions-project/web_app_fe:v1 .  
-              docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/USERNAME/github-actions-project/web_app_fe:v1
+              docker build -t docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1 .  
+              docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1
 
         - name: Verify web application using CURL
           run: |
@@ -54,13 +54,13 @@ jobs:
         - name: web_app Image Push
           run: |
             #Authenticate to GitHub Packages using secret
-              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u USERNAME --password-stdin
+              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ env.USERNAME }} --password-stdin
             # Push the Docker image to GitHub Packages
-              docker push docker.pkg.github.com/USERNAME/github-actions-project/redis_be:v1
+              docker push docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/redis_be:v1
 
         - name: redis Image Push
           run: |
             #Authenticate to GitHub Packages using secret
-              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u USERNAME --password-stdin
+              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ env.USERNAME }} --password-stdin
             # Push the Docker image to GitHub Packages
-              docker push docker.pkg.github.com/USERNAME/github-actions-project/web_app_fe:v1
+              docker push docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1
