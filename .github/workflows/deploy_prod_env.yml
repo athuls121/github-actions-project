@@ -24,7 +24,7 @@ jobs:
 
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
-    environment: Production Environment    #creating seperate Production Environment in GitHub
+    environment: Production Environment
 
     steps:
       - name: Checkout code
@@ -52,25 +52,9 @@ jobs:
           echo "[servers]" > inventory.ini
           echo "${{ env.HOST }} ansible_user=${{ env.USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa" >> inventory.ini
 
-      - name: Write Ansible playbook
-        run: |
-          echo "- name: Deploy to Production
-                hosts: servers
-                tasks:
-                  - name: Pull Redis image
-                    command: docker pull ${{ env.IMAGE_NAME_DB }}:${{ env.TAG }}
-                  - name: Run Redis container
-                    command: docker run --rm -d --name redis -p 6379:6379 ${{ env.IMAGE_NAME_DB }}:${{ env.TAG }}
-                  - name: Pull Web App image
-                    command: docker pull ${{ env.IMAGE_NAME_APP }}:${{ env.TAG }}
-                  - name: Run Web App container
-                    command: docker run --rm -d --name web_app -p 8080:8080 ${{ env.IMAGE_NAME_APP }}:${{ env.TAG }}"
-          > playbook.yml
-
       - name: Show playbook content
         run: |
-            ls
-            cat playbook.yml
-        
+          cat playbook.yml  
+
       - name: Run Ansible playbook
-        run: ansible-playbook -i inventory.ini playbook.yml
+        run: ansible-playbook -i inventory.ini playbook.yml  
