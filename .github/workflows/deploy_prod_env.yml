@@ -67,5 +67,8 @@ jobs:
                     command: docker run --rm -d --name web_app -p 8080:8080 ${{ env.IMAGE_NAME_APP }}:${{ env.TAG }}"
           > playbook.yml
 
+      - name: Show playbook content
+        run: cat playbook.yml
+        
       - name: Run Ansible playbook
         run: ansible-playbook -i inventory.ini playbook.yml
