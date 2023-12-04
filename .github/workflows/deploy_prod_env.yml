@@ -1,4 +1,4 @@
-name: Deploy Testing Env
+name: Deploy Production Env
 
 on:
   workflow_run:
