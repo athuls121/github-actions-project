@@ -16,6 +16,10 @@ jobs:
   deploy_production:
     runs-on: ubuntu-latest
 
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'completed' }}
+
+    environment: Production Environment    #creating seperating environment in GitHub
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -26,8 +30,8 @@ jobs:
         run: |
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            docker image pull ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
-            docker run --rm -d --name redis -p 6379:6379 ${{ secrets.IMAGE_NAME_DB }}:${{ secrets.TAG }}
+            docker image pull "${{ secrets.IMAGE_NAME_DB }}":"${{ secrets.TAG }}"
+            docker run --rm -d --name redis -p 6379:6379 "${{ secrets.IMAGE_NAME_DB }}":"${{ secrets.TAG }}"
 
             #docker image pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
             #docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
@@ -36,8 +40,8 @@ jobs:
         run: |
             #Authenticate to GitHub Packages using secret
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u athuls121 --password-stdin
-            docker image pull ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
-            docker run --rm -d --name web_app -p 8080:8080 ${{ secrets.IMAGE_NAME_APP }}:${{ secrets.TAG }}
+            docker image pull "${{ secrets.IMAGE_NAME_APP }}":"${{ secrets.TAG }}"
+            docker run --rm -d --name web_app -p 8080:8080 "${{ secrets.IMAGE_NAME_APP }}":"${{ secrets.TAG }}"
             
             #docker image pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
             #docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
