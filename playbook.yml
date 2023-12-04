@@ -10,4 +10,3 @@
       command: docker pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
     - name: Run Web App container
       command: docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
-
