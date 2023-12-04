@@ -68,7 +68,9 @@ jobs:
           > playbook.yml
 
       - name: Show playbook content
-        run: cat playbook.yml
+        run: |
+            ls
+            cat playbook.yml
         
       - name: Run Ansible playbook
         run: ansible-playbook -i inventory.ini playbook.yml
