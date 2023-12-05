@@ -5,10 +5,9 @@
   tasks:
     - name: Pull Redis image
       command: sudo docker pull redis
-    - name: Run Redis container
-      command: sudo docker run --rm -d --name redis -p 6379:6379 redis
-    - name: Pull Web App image
-      command: sudo docker pull athuls121/web_app_fe:v1
-    - name: Run Web App container
-      command: sudo docker run --rm -d --name web_app -p 8080:8080 athuls121/web_app_fe:v1
 
+    - name: Pull Web App image
+      command: sudo docker pull athuls121/web_app_fe:latest
+
+    - name: Running Docker Compose file
+      command: sudo docker-compose down && sudo docker-compose up

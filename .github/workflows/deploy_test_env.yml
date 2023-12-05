@@ -34,8 +34,8 @@ jobs:
 
       - name: Run the web_app - FrontEnd
         run: |
-            docker image pull athuls121/web_app_fe:v1
-            docker run --rm -d --name web_app -p 8080:8080 athuls121/web_app_fe:v1
+            docker image pull athuls121/web_app_fe:latest
+            docker run --rm -d --name web_app -p 8080:8080 athuls121/web_app_fe:latest
 
 
       - name: Verify web application using CURL

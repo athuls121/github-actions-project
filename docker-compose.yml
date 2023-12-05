@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:latest
+    container_name: redis-server
+    ports:
+      - "6379:6379"
+    networks:
+      - my_network
+
+  python_app:
+    image: athuls121/web_app_fe:latest
+    container_name: web_app
+    ports:
+      - "8080:8080"
+    depends_on:
+      - redis
+    networks:
+      - my_network
+
+networks:
+  my_network:
+    driver: bridge
