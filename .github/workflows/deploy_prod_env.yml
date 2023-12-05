@@ -27,35 +27,34 @@ jobs:
     environment: Production Environment
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
           python-version: '3.12'
 
-      - name: Checkout code
-        uses: actions/checkout@v2
-
       - name: Install Ansible
         run: |
-          pip install ansible
+             pip install ansible
 
-      - name: Create Ansible inventory
-        run: |
-            echo "[servers]" > inventory.ini
-            echo "${{ env.HOST }} ansible_user=${{ env.USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa" >> inventory.ini
+#      - name: Create Ansible inventory
+#        run: |
+#            echo "[servers]" > inventory.ini
+#            echo "${{ env.HOST }} ansible_user=${{ env.USERNAME }} ansible_ssh_private_key_file=~/.ssh/id_rsa" >> inventory.ini
   
       - name: Show playbook content
         run: |
-            cat playbook.yml  
+              cat playbook.yml  
   
       - name: Run Ansible playbook
         run: |
-              ansible-playbook -i inventory.ini playbook.yml
+              #ansible-playbook -i inventory.ini playbook.yml
+              ansible-playbook playbook.yml
 
       - name: Verify web application using CURL
         run: |
             sleep 5s
             docker ps
             curl http://localhost:8080
-
