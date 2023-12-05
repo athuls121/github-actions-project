@@ -1,6 +1,6 @@
 ---
 - name: Deploy to Production
-  hosts: servers
+  hosts: all
   tasks:
     - name: Pull Redis image
       command: docker pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1

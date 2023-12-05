@@ -50,8 +50,7 @@ jobs:
   
       - name: Run Ansible playbook
         run: |
-              #ansible-playbook -i inventory.ini playbook.yml
-              ansible-playbook playbook.yml
+              ansible-playbook -i inventory.ini playbook.yml
 
       - name: Verify web application using CURL
         run: |
