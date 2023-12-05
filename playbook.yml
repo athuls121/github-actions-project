@@ -1,12 +1,14 @@
 ---
+
 - name: Deploy to Production
-  hosts: all
+  hosts: localhost
   tasks:
     - name: Pull Redis image
-      command: docker pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
+      command: sudo docker pull docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
     - name: Run Redis container
-      command: docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
+      command: sudo docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/athuls121/github-actions-project/redis_be:v1
     - name: Pull Web App image
-      command: docker pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+      command: sudo docker pull docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
     - name: Run Web App container
-      command: docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+      command: sudo docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/athuls121/github-actions-project/web_app_fe:v1
+
