@@ -10,4 +10,4 @@
       command: sudo docker pull athuls121/web_app_fe:latest
 
     - name: Running Docker Compose file
-      command: sudo docker-compose up && sudo docker-compose down && sudo docker-compose up
+      command: sudo docker-compose up -d
