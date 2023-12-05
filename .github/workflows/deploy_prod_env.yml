@@ -41,6 +41,5 @@ jobs:
 
       - name: Verify web application using CURL
         run: |
-            sleep 5s
-            docker ps
+            sleep 2s
             sudo curl http://localhost:8080

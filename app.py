@@ -16,7 +16,7 @@ def store_data():
     value = request.form['value']
     if key and value:
         redis_db.set(key, value)
-        return jsonify({'message': 'Data stored successfully'})
+        return jsonify({'message': 'Data stored successfully'})            
     else:
         return jsonify({'error': 'Key or value is missing'})
 
