@@ -8,13 +8,7 @@ inputs:
     required: true
     default: 'requirements.txt'
 
-runs:
-  using: 'docker'
-  image: './Dockerfile' 
-
 steps:
-  - name: Checkout code
-    uses: actions/checkout@v2
 
   - name: Set up Python
     run: |
