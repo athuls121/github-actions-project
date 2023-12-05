@@ -25,20 +25,12 @@ jobs:
         - name: Run the redis - BackEnd
           run: |
               docker image pull redis:latest
-              docker image tag redis:latest docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/redis_be:v1
-              docker run --rm -d --name redis -p 6379:6379 docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/redis_be:v1
+              docker run --rm -d --name redis -p 6379:6379 redis
 
-        - name: Run the web_app - FrontEnd
+        - name: Run the web_app - FrontEndweb_app_fe
           run: |
-              ls -a
-              docker build -t docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1 .  
-              docker run --rm -d --name web_app -p 8080:8080 docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1
-
-#        - name: Verify web application using CURL
-#          run: |
-#              sleep 5s
-#              docker ps
-#              curl http://localhost:8080
+               docker build -t athuls121/web_app_fe:v1 .  
+               docker run --rm -d --name web_app -p 8080:8080 athuls121/web_app_fe:v1
 
         - name: Wait for app to start
           run: |
@@ -53,14 +45,6 @@ jobs:
 
         - name: web_app Image Push
           run: |
-            #Authenticate to GitHub Packages using secret
-              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ env.USERNAME }} --password-stdin
-            # Push the Docker image to GitHub Packages
-              docker push docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/redis_be:v1
-
-        - name: redis Image Push
-          run: |
-            #Authenticate to GitHub Packages using secret
-              echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ env.USERNAME }} --password-stdin
-            # Push the Docker image to GitHub Packages
-              docker push docker.pkg.github.com/${{ env.USERNAME }}/${{ env.REPOSITORY }}/web_app_fe:v1
+              # Push the Docker image to GitHub Packages
+              echo "${{ secrets.DOCKERHUB_PWD }}" | docker login -u athuls121 --password-stdin 
+              docker push athuls121/web_app_fe:v1

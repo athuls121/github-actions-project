@@ -5,7 +5,7 @@ on:
     workflows: ["Deploy Testing Env"]
     types:
       - completed
-
+      
 # declaring global env variables
 env:
     USERNAME: ${{ github.repository_owner }}
@@ -19,6 +19,7 @@ env:
     SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
 
 jobs:
+
   Linux-self-hosted:
     runs-on: self-hosted
 
