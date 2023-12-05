@@ -2,7 +2,7 @@ name: Deploy Testing Env
 
 on:
   workflow_run:
-    workflows: ["Code Testing"]
+    workflows: ["Unit Test and Build Checks"]
     types:
       - completed
 
