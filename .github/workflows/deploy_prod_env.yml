@@ -11,12 +11,12 @@ env:
     USERNAME: ${{ github.repository_owner }}
     REPOSITORY: ${{ github.event.repository.name }}
   
-    HOST: ${{ secrets.EC2_HOST }}                     #SSH Future Works
-    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}   #SSH Future Works
+    HOST: ${{ secrets.EC2_HOST }}                     #SSH Purpose
+    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}   #SSH Purpose
 
 jobs:
-  Deployed_over_Production_Environment:
-    runs-on: self-hosted                              #AWS EC2 Instance
+  Linux-self-hosted:
+    runs-on: self-hosted
 
 # Workflow Condition
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
