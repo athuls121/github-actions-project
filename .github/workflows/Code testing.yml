@@ -16,10 +16,7 @@ jobs:
         - name: Checkout code
           uses: actions/checkout@v2
 
-#        - name: Install dependencies
-#          run: pip install -r requirements.txt
-
-    # #Using CUSTOM ACTIONS to install the requirements namely Python modules
+# Using CUSTOM ACTIONS to install the requirements namely Python modules
         - name: Install dependencies
           uses: ./  
           with:
@@ -39,9 +36,9 @@ jobs:
                docker build -t athuls121/web_app_fe:latest .  
                docker run --rm -d --name web_app -p 8080:8080 athuls121/web_app_fe:latest
 
-        - name: Wait for app to start
+        - name: Wait for Application to start
           run: |
-            sleep 10
+            sleep 3
             docker ps
 
         - name: Archive test report
@@ -55,4 +52,3 @@ jobs:
               # Push the Docker image to GitHub Packages
               echo "${{ secrets.DOCKERHUB_PWD }}" | docker login -u athuls121 --password-stdin 
               docker push athuls121/web_app_fe:latest
-

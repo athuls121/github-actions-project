@@ -11,26 +11,24 @@ env:
     USERNAME: ${{ github.repository_owner }}
     REPOSITORY: ${{ github.event.repository.name }}
   
-    IMAGE_NAME_DB: ${{ secrets.IMAGE_NAME_DB }}
-    IMAGE_NAME_APP: ${{ secrets.IMAGE_NAME_APP }}
-    TAG: ${{ secrets.TAG }}
-  
-    HOST: ${{ secrets.EC2_HOST }}
-    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+    HOST: ${{ secrets.EC2_HOST }}                     #SSH Purpose
+    SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}   #SSH Purpose
 
 jobs:
-
   Linux-self-hosted:
     runs-on: self-hosted
 
+# Workflow Condition
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
+# creating seperate Production Environment in GitHub
     environment: Production Environment
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-  
+
+# Executing the Ansible Playbook for Production Deployment 
       - name: Show playbook content
         run: |
               cat playbook.yml  
@@ -39,7 +37,7 @@ jobs:
         run: |
               ansible-playbook playbook.yml
 
-      - name: Verify web application using CURL
+      - name: Verify Web Application using CURL
         run: |
             sleep 2s
             sudo curl http://localhost:8080

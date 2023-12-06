@@ -11,14 +11,18 @@ env:
   USERNAME: ${{ github.repository_owner }}
   REPOSITORY: ${{ github.event.repository.name }}
 
+  DOCKER_REPO: ${{ secrets.DOCKER_REPO }}   #DockerHub Repo
+
 
 jobs:
   deploy_testing:
     runs-on: ubuntu-latest
 
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}    #creating seperating environment in GitHub
+# Workflow Condition
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
 
-    environment: Testing Environment    #creating seperate Test Environment in GitHub
+# creating seperate Testing Environment in GitHub
+    environment: Testing Environment    
 
     steps:
       - name: Checkout code
@@ -35,23 +39,20 @@ jobs:
       - name: Run the web_app - FrontEnd
         run: |
             docker image pull athuls121/web_app_fe:latest
-            docker run --rm -d --name web_app -p 8080:8080 athuls121/web_app_fe:latest
+            docker run --rm -d --name web_app -p 8080:8080 ${{ env.DOCKER_REPO }}/web_app_fe:latest
 
-
-      - name: Verify web application using CURL
+      - name: Wait for Application to start
         run: |
-            sleep 5s
+            sleep 3
             docker ps
-            curl http://localhost:8080
 
-      - name: Wait for unit test to start
-        run: sleep 10
+# Verification of the application using CURL
+      - name: Verify Web Application using CURL
+        run: |
+            curl http://localhost:8080 2>&1 | tee app-verification.txt
 
-      - name: Run Tests
-        run: python test_app.py 2>&1 | tee test-report.txt
-
-      - name: Archive test report
+      - name: Archive App Verification Report
         uses: actions/upload-artifact@v2
         with:
-          name: test-report-TestEnv
-          path: test-report-TestEnv.txt
+          name: App-Verification
+          path: app-verification.txt
