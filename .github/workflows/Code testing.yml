@@ -9,7 +9,7 @@ env:
 
 
 jobs:
-  code_testing:
+  Build_Checks_and_Unit_Tests:
       runs-on: ubuntu-latest
 
       steps:
@@ -22,8 +22,7 @@ jobs:
           with:
             requirements-file: 'requirements.txt'  
 
-
-        - name: Run Tests
+        - name: Run Unit Tests
           run: python test_app.py 2>&1 | tee test-report.txt
 
         - name: Run the redis - BackEnd
