@@ -25,11 +25,6 @@ jobs:
         - name: Run Unit Tests
           run: python test_app.py 2>&1 | tee test-report.txt
 
-        - name: Run the redis - BackEnd
-          run: |
-              docker image pull redis:latest
-              docker run --rm -d --name redis -p 6379:6379 redis
-
         - name: Run the web_app - FrontEndweb_app_fe
           run: |
                docker build -t athuls121/web_app_fe:latest .  
