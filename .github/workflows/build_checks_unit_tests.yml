@@ -46,3 +46,4 @@ jobs:
               # Push the Docker image to DockerHub Repo
               echo "${{ secrets.DOCKERHUB_PWD }}" | docker login -u athuls121 --password-stdin 
               docker push athuls121/web_app_fe:latest
+
