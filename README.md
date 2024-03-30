@@ -1,4 +1,4 @@
-# github-actions-project
+# Github Actions Project
 
 Term Project: Deployment and Configuration of an Application using GitHub Actions and Configuration Management Tools
 
