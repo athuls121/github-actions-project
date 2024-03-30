@@ -9,5 +9,6 @@ Project Description: Students will work in teams to deploy an application using 
 
 This project focuses on the automation of Continuous Integration (CI) and Continuous Deployment (CD) workflows for a Python application incorporating a Redis database and a web server. The methodology begins by establishing a dedicated GitHub repository for the application's source code, followed by the implementation of GitHub Actions to automate crucial processes in the software development lifecycle. The automated pipeline enhances code reliability and expedites development cycles. Emphasis is placed on automated build checks, unit tests, and deployment across multiple environments for comprehensive validation and eventual end-user accessibility. Security measures, including managing sensitive information via GitHub Actions, are integrated. Artifacts are utilized to facilitate seamless data transfer across deployment stages, ensuring effective communication. Ansible serves as the chosen Configuration Management tool, maintaining system integrity by defining the application's desired state, managing production deployment, Docker image retrieval from Docker Hub, and executing Docker-compose for a stable and secure operational environment.
 
+
 ![image](https://github.com/athuls121/github-actions-project/assets/91245503/3180d17c-fd75-4889-bfb8-dfeca9abd5f2)
 
